@@ -2,11 +2,9 @@ require 'timeout'
 
 class RunController < ApplicationController
     def run_python
-        code = params[:code].gsub "'", "\\'"
-        # result = `python scripts/run_python.py "#{code}" 2>&1`
+        code = params[:code].gsub '"', '\\"'
         r, w = IO.pipe
-        pid = Process.spawn("python scripts/run_python.py '#{code}' 2>&1", :out => w)
-        # pid = Process.spawn('sleep 20')
+        pid = Process.spawn('python scripts/run_python.py "' + code + '" 2>&1', :out => w)
         w.close
 
         begin
